@@ -1,0 +1,25 @@
+Seed: 22120294
+DSA Testing
+Test Array: [93, 58, 48, 97, 21, 11, 96, 26, 59, 84]
+Testing DSA Stack
+expected output: [84, 59, 26, 96, 11, 21, 97, 48, 58, 93]
+output: [84, 59, 26, 96, 11, 21, 97, 48, 58, 93]
+Test Passed!
+
+Testing DSA Queues
+Testing DSA Shuffle Queue
+Expected output: [93, 58, 48, 97, 21, 11, 96, 26, 59, 84]
+Output: [93, 58, 48, 97, 21, 11, 96, 26, 59, 84]
+Test Passed!
+
+Testing DSA Circular Queue
+Expected Output: [93, 58, 48, 97, 21, 11, 96, 26, 59, 84]
+Output: [93, 58, 48, 97, 21, 11, 96, 26, 59, 84]
+Test Passed!
+
+Postfix Testing!
+Evaluating: ( 97 + 30 ) / ( 89 - ( 73 * 25 ) )
+Expected value: -0.073
+Actual value: -0.073
+Test Passed!
+

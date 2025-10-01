@@ -1,0 +1,13 @@
+fibonnacciRecursive from 1 to 26 finished in 0.138 seconds.
+fibonnacciIterative from 1 to 1111 finished in 0.100 seconds.
+factorialRecursive from 1 to 722 finished in 0.100 seconds.
+factorialIterative from 1 to 888 finished in 0.100 seconds.
+GCD found 12029 GCD's of random pairs. finished in 0.100 seconds.
+convertBase converted 26641 random values to random bases. finished in 0.100 seconds.
+
+the results From my testing indicate that calculating fibonnacci numbers recursively is extremely innefficient, attempting to calculate any value over 50 using this algorithm took over 30 seconds.
+In contrast, the iterative algorithm was highly performant, and was over 10000x more efficient for high values.
+The difference between the factorial iterative and recursive designs was less apparent; the iterative design was slightly more efficient.
+These results could all be increased significantly with use of caching, but that implementation is outisde the scope of this assignment
+
+The Greatest common denominator algorithm is highly performant, able to calculate 120,000 GCD's per second on my device when using random values between 1 and 10000. This drops to approximately 55,000/second when we increase this limit to 1,000,000
