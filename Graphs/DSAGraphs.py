@@ -101,8 +101,7 @@ class DSAGraph(Generic[T]):
     def depth_first_search(self) -> DSALinkedQueue:
         visited = []
         output = DSALinkedQueue()
-        first_node = as_sorted(self.vertices, foo = lambda v : v.label).peek_first()
-        print(as_sorted(self.vertices, foo=lambda v: v.label))
+        first_node = as_sorted(self.vertices, key= lambda v : v.label).peek_first()
         self.DFS_visit(first_node, visited, output)
         return output
 
@@ -116,8 +115,26 @@ class DSAGraph(Generic[T]):
             self.DFS_visit(v, visited, output)
 
     def breadth_first_search(self):
-        pass
+        visited = DSALinkedList()
+        output = DSALinkedQueue()
+        upcoming = DSALinkedQueue()
+        upcoming.push(as_sorted(self.vertices, key= lambda v : v.label).peek_first())
+
+        while not upcoming.is_empty():
+            curr = upcoming.pop()
+            while curr in visited:
+                curr = upcoming.pop()
+
+            for i in filter(lambda v: v not in visited, as_sorted(curr.links, key=lambda v : v.label)):
+                upcoming.push(i)
+
+            output.push(curr)
+            visited.insert_first(curr)
+
+        return output
+
 
 if __name__ == "__main__":
     example1 = DSAGraph(connections=[ ("A", "B"), ("A", "D"), ("A", "C"), ("B", "E"), ("C", "D"), ("D", "F"), ("E", "F"), ("E", "G"), ("F", "G") ])
-    print([i.label for i in example1.depth_first_search()])
+    example2 = DSAGraph(connections=[ ("A", "B"), ("A", "C"), ("A", "D"), ("B", "E"), ("C", "F"), ("D", "E"), ("D", "F"), ("D", "H"), ("E", "G"), ("F", "I"), ("H", "G"), ("H", "I"), ("H", "J")])
+    print([i.label for i in example2.breadth_first_search()])

@@ -2,6 +2,8 @@ from typing import TypeVar, Generic
 from SortFilesPython.DSAsorts import selection_sort
 
 T = TypeVar('T')
+
+
 class DSALinkedList(Generic[T]):
     class ListItem(Generic[T]):
         def __init__(self, value: T, next_item=None, prev_item=None):
@@ -60,7 +62,7 @@ class DSALinkedList(Generic[T]):
             self.start = self.ListItem(item)
             self.end = self.start
         else:
-            new_item = self.ListItem(item, prev_item = self.end)
+            new_item = self.ListItem(item, prev_item=self.end)
             self.end.set_next(new_item)
             self.end = new_item
 
@@ -125,12 +127,13 @@ class DSALinkedList(Generic[T]):
         self.remove_last()
         return out
 
-def as_sorted(lst:DSALinkedList[T], foo=None, reverse=False) -> DSALinkedList[T]:
+
+def as_sorted(lst: DSALinkedList[T], *, key=None, reverse=False) -> DSALinkedList[T]:
     new = DSALinkedList()
     #allows for lambda arguments to sort instances of a class by attribute
-    if foo is not None:
-        pairs = dict([(foo(i), i) for i in lst])
-        old = [foo(i) for i in lst]
+    if key is not None:
+        pairs = dict([(key(i), i) for i in lst])
+        old = [key(i) for i in lst]
         for i in selection_sort(old, reverse=reverse):
             new.insert_last(pairs[i])
     else:
