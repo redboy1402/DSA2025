@@ -74,7 +74,7 @@ def doSort(n, sortType, arrayType):
         if sortType == "b":
             DSAsorts.bubbleSort(A)
         elif sortType == "s":
-            DSAsorts.selectionSort(A)
+            DSAsorts.selection_sort(A)
         elif sortType == "i":
             DSAsorts.insertionSort(A)
         elif sortType == "m":
