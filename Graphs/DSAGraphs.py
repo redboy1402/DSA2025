@@ -3,7 +3,7 @@ import random
 import LinkedLists.LinkedLists as ll
 from typing import TypeVar, Generic
 
-from LinkedLists.LinkedLists import DSALinkedList, as_lambda_sorted
+from LinkedLists.LinkedLists import DSALinkedList, as_sorted
 from LinkedLists.LinkedStacksQueues import DSALinkedQueue, DSAStack
 from SortFilesPython.DSAsorts import selection_sort
 
@@ -31,6 +31,9 @@ class DSAGraph(Generic[T]):
             self.label = label
             self.links = DSALinkedList()
             self.value = value
+
+        def __repr__(self):
+            return f'{self.label}'
 
     def find_vertex(self, label: str) -> DSAGraphVertex | None:
         val = [v for v in self.vertices if v.label == label]
@@ -98,7 +101,8 @@ class DSAGraph(Generic[T]):
     def depth_first_search(self) -> DSALinkedQueue:
         visited = []
         output = DSALinkedQueue()
-        first_node = as_lambda_sorted(self.vertices, foo = lambda v : v.label).peek_first()
+        first_node = as_sorted(self.vertices, foo = lambda v : v.label).peek_first()
+        print(as_sorted(self.vertices, foo=lambda v: v.label))
         self.DFS_visit(first_node, visited, output)
         return output
 
@@ -108,19 +112,12 @@ class DSAGraph(Generic[T]):
 
         visited.append(vertex)
         output.push(vertex)
-
         for v in vertex.links:
             self.DFS_visit(v, visited, output)
 
-def depth_first_search(graph: DSAGraph):
-    graph.depth_first_search()
-
+    def breadth_first_search(self):
+        pass
 
 if __name__ == "__main__":
     example1 = DSAGraph(connections=[ ("A", "B"), ("A", "D"), ("A", "C"), ("B", "E"), ("C", "D"), ("D", "F"), ("E", "F"), ("E", "G"), ("F", "G") ])
-    test = DSALinkedQueue()
-    for i in range(10):
-        test.push(random.randint(0, 10))
-    print(test.)
-    print([i for i in test])
-    #print([i.label for i in example1.depth_first_search()])
+    print([i.label for i in example1.depth_first_search()])

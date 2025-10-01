@@ -1,6 +1,5 @@
 from LinkedLists.LinkedLists import DSALinkedList
 
-
 class DSAStack:
     def __init__(self):
         self.items = DSALinkedList()
@@ -29,7 +28,7 @@ class DSALinkedQueue:
         self.count = 0
 
     def __iter__(self):
-        while not self.is_empty:
+        while not self.is_empty():
             yield self.pop()
 
     def is_empty(self):
@@ -39,4 +38,6 @@ class DSALinkedQueue:
         self.items.insert_last(item)
 
     def pop(self):
+        item = self.items.peek_first()
         self.items.remove_first()
+        return item

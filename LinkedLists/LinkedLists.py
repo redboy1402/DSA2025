@@ -12,6 +12,9 @@ class DSALinkedList(Generic[T]):
         def __str__(self):
             return f"Value: {self.value}, Prev: {self.prev.get_value() if self.prev is not None else None}, Next: [{self.next if self.next is not None else None}]"
 
+        def __repr__(self):
+            return self.get_value()
+
         def get_prev(self):
             return self.prev
 
@@ -40,6 +43,8 @@ class DSALinkedList(Generic[T]):
             yield curr.get_value()
             curr = curr.get_next()
 
+    def __str__(self):
+        return str([*self])
 
     def insert_first(self, item: T):
         if self.is_empty():
@@ -120,19 +125,18 @@ class DSALinkedList(Generic[T]):
         self.remove_last()
         return out
 
-def as_sorted(lst: DSALinkedList) -> DSALinkedList:
-    old = [i for i in lst]
+def as_sorted(lst:DSALinkedList[T], foo=None, reverse=False) -> DSALinkedList[T]:
     new = DSALinkedList()
-    for i in selection_sort(old):
-        new.insert_first(i)
-    return new
-
-def as_lambda_sorted(lst:DSALinkedList[T], foo, reverse=False) -> DSALinkedList[T]:
-    pairs = dict([(foo(i), i) for i in lst])
-    old = [foo(i) for i in lst]
-    new = DSALinkedList()
-    for i in selection_sort(old, reverse=reverse):
-        new.insert_last(pairs[i])
+    #allows for lambda arguments to sort instances of a class by attribute
+    if foo is not None:
+        pairs = dict([(foo(i), i) for i in lst])
+        old = [foo(i) for i in lst]
+        for i in selection_sort(old, reverse=reverse):
+            new.insert_last(pairs[i])
+    else:
+        old = list(lst)
+        for i in selection_sort(old, reverse=reverse):
+            new.insert_last(i)
     return new
 
 
