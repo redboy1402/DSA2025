@@ -5,6 +5,7 @@
 #
 import random
 from random import Random
+from typing import Iterable
 
 import numpy as np
 
@@ -24,6 +25,7 @@ def compareArr(a: list | np.ndarray[tuple[int], np.dtype[np.signedinteger]], b: 
             if a[i] != b[i]:
                 temp = False
         return temp
+
 def bubbleSort(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]]) -> np.ndarray[tuple[int], np.dtype[np.signedinteger]]:
     arrLen = getArrLen(arr)
     for i in range(arrLen-1):
@@ -39,22 +41,26 @@ def bubbleSort(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]]) -> np.nd
 
 
 
-def insertionSort(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]]) -> list:
+def insertionSort(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]]) -> list[int]:
     for i in range(1, len(arr)):
         j = i
         while j>0 and arr[j-1] > arr[j]:
             arr[j], arr[j-1] = arr[j-1], arr[j]
             j -= 1
-    return arr
+    return [*arr]
 
-def selectionSort(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]]) -> list:
-    for i in range(getArrLen(arr)-1):
-        min = i
-        for j in range(i+1, getArrLen(arr)-1):
-            if arr[j] < arr[min]:
-                min = j
-        arr[i], arr[min] = arr[min], arr[i]
-    return arr
+def selection_sort(arr: list, reverse:bool = False) -> list:
+    for i in range(getArrLen(arr)):
+        mini = i
+        for j in range(i+1, getArrLen(arr)):
+            if arr[j] < arr[mini]:
+                mini = j
+        arr[i], arr[mini] = arr[mini], arr[i]
+
+    if reverse:
+        arr = arr[::-1]
+
+    return [*arr]
 
 
 def mergeSort(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]]) -> list:
@@ -81,11 +87,6 @@ def doPartitioning(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]], left
 
 
 if __name__ == "__main__":
-    arr = np.arange(10)
-#    for i in range(10):
-#        x = random.randint(0, len(arr)-1)
-#        y = random.randint(0, len(arr)-1)
-#        arr[x], arr[y] = arr[y], arr[x]
-    arr = arr[::-1]
+    arr = [random.randint(0, 20) for _ in range(10)]
     print(arr)
-    print(bubbleSort(arr))
+    print(selection_sort(arr))

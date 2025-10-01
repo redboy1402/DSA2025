@@ -1,29 +1,46 @@
+import random
+
 import LinkedLists.LinkedLists as ll
 from typing import TypeVar, Generic
+
+from LinkedLists.LinkedLists import DSALinkedList, as_lambda_sorted
+from LinkedLists.LinkedStacksQueues import DSALinkedQueue, DSAStack
+from SortFilesPython.DSAsorts import selection_sort
 
 T = TypeVar('T')
 
 class DSAGraph(Generic[T]):
-    def __init__(self, directional: bool = False):
+    def __init__(self, directional: bool = False, connections: list[tuple[str, str]] | list[str] | None = None):
         self.directional = directional
         self.edges = 0
-        self.vertices = ll.DSALinkedList()
+        self.vertices: ll.DSALinkedList[DSAGraph.DSAGraphVertex] = ll.DSALinkedList()
+
+        if connections is None:
+            return
+
+        for e in connections:
+            self.add_edge(e[0], e[1])
+
+
+    def __iter__(self):
+        for v in self.vertices:
+            yield v
 
     class DSAGraphVertex:
-        def __init__(self, label, value: T|None = None, links: ll.DSALinkedList = ll.DSALinkedList()):
+        def __init__(self, label, value: T|None = None):
             self.label = label
-            self.links = links
+            self.links = DSALinkedList()
             self.value = value
 
     def find_vertex(self, label: str) -> DSAGraphVertex | None:
-        val = [v for v in self.vertices.to_list() if v.label == label]
+        val = [v for v in self.vertices if v.label == label]
         if not val: return None
         return val[0]
 
     def add_vertex(self, label, value = None) -> DSAGraphVertex:
         if label in [v.label for v in self.vertices.to_list()]:
             raise Exception(f'Vertex with label {label} exists')
-        vertex = self.DSAGraphVertex(label, ll.DSALinkedList(), value)
+        vertex = self.DSAGraphVertex(label, value)
         self.vertices.insert_last(vertex)
         return vertex
 
@@ -50,17 +67,60 @@ class DSAGraph(Generic[T]):
         return self.edges
 
     def get_vertex(self, label:str) -> DSAGraphVertex:
-        return next(v.value for v in self.vertices.to_list() if v.label == label)
+        return next(v.value for v in self.vertices if v.label == label)
 
-    def get_adjacent(self, label:str) -> list[DSAGraphVertex]:
-        return next(v.links for v in self.vertices.to_list() if v.label == label)
+    def get_adjacent(self, label:str) -> DSALinkedList:
+        return next(v.links for v in self.vertices if v.label == label)
 
     def is_adjacent(self, vertex1_label:str, vertex2_label:str):
         return vertex2_label in [v.label for v in self.get_adjacent(vertex1_label)]
 
     def display_as_list(self) -> None:
-        for v in self.vertices.to_list():
-            print(v.label)
-            print(v.value)
-            for vv in v.links.to_list():
+        for v in self.vertices:
+            print(v.label, v.value)
+            for vv in v.links:
                 print(f"\t{vv.label}:{vv.value}")
+
+    def display_as_matrix(self) -> None:
+        row = "  "
+        for v in self.vertices:
+            row += v.label + " "
+        print(row)
+        for v in self.vertices:
+            row: str = v.label + " "
+            for vv in self.vertices:
+                if vv in v.links:
+                    row += "1 "
+                else:
+                    row += "0 "
+            print(row)
+
+    def depth_first_search(self) -> DSALinkedQueue:
+        visited = []
+        output = DSALinkedQueue()
+        first_node = as_lambda_sorted(self.vertices, foo = lambda v : v.label).peek_first()
+        self.DFS_visit(first_node, visited, output)
+        return output
+
+    def DFS_visit(self, vertex: DSAGraphVertex, visited, output: DSALinkedQueue):
+        if vertex in visited:
+            return
+
+        visited.append(vertex)
+        output.push(vertex)
+
+        for v in vertex.links:
+            self.DFS_visit(v, visited, output)
+
+def depth_first_search(graph: DSAGraph):
+    graph.depth_first_search()
+
+
+if __name__ == "__main__":
+    example1 = DSAGraph(connections=[ ("A", "B"), ("A", "D"), ("A", "C"), ("B", "E"), ("C", "D"), ("D", "F"), ("E", "F"), ("E", "G"), ("F", "G") ])
+    test = DSALinkedQueue()
+    for i in range(10):
+        test.push(random.randint(0, 10))
+    print(test.)
+    print([i for i in test])
+    #print([i.label for i in example1.depth_first_search()])

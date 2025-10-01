@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
+from LinkedLists.LinkedLists import DSALinkedList
 
-from LinkedLists import DSALinkedList
 
 class DSAStack:
     def __init__(self):
@@ -28,6 +27,10 @@ class DSALinkedQueue:
     def __init__(self):
         self.items = DSALinkedList()
         self.count = 0
+
+    def __iter__(self):
+        while not self.is_empty:
+            yield self.pop()
 
     def is_empty(self):
         return self.items.is_empty()

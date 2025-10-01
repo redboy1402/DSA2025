@@ -1,4 +1,6 @@
 from typing import TypeVar, Generic
+from SortFilesPython.DSAsorts import selection_sort
+
 T = TypeVar('T')
 class DSALinkedList(Generic[T]):
     class ListItem(Generic[T]):
@@ -31,6 +33,13 @@ class DSALinkedList(Generic[T]):
     def __init__(self):
         self.start = None
         self.end = None
+
+    def __iter__(self):
+        curr: DSALinkedList.ListItem | None = self.start
+        while curr is not None:
+            yield curr.get_value()
+            curr = curr.get_next()
+
 
     def insert_first(self, item: T):
         if self.is_empty():
@@ -100,3 +109,37 @@ class DSALinkedList(Generic[T]):
             out.append(item.value)
             item = item.next
         return out
+
+    def pop_first(self) -> T:
+        out = self.peek_first
+        self.remove_first()
+        return out
+
+    def pop_last(self) -> T:
+        out = self.peek_last
+        self.remove_last()
+        return out
+
+def as_sorted(lst: DSALinkedList) -> DSALinkedList:
+    old = [i for i in lst]
+    new = DSALinkedList()
+    for i in selection_sort(old):
+        new.insert_first(i)
+    return new
+
+def as_lambda_sorted(lst:DSALinkedList[T], foo, reverse=False) -> DSALinkedList[T]:
+    pairs = dict([(foo(i), i) for i in lst])
+    old = [foo(i) for i in lst]
+    new = DSALinkedList()
+    for i in selection_sort(old, reverse=reverse):
+        new.insert_last(pairs[i])
+    return new
+
+
+if __name__ == "__main__":
+    test = DSALinkedList()
+    test.insert_last(1)
+    test.insert_last(2)
+    test.insert_last(3)
+    for i in test:
+        print(i.value)
