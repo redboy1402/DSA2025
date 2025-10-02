@@ -1,22 +1,23 @@
-from numpy.ma.core import argsort
+from typing import Callable
 
-import LinkedLists as ll
-import random
+from LinkedLists.LinkedLists import DSALinkedList
 
 #underscore start & end
 us = '\033[4m'
 ue = '\033[0m'
 
 class CLI_generator:
-    def __init__(self, title: str, args: dict[str: str], init_foo):
+    def __init__(self, title: str, args: dict[str: Callable], init_foo = None):
         self.title = title
-        self.args: dict[str: str] = args
-        init_foo()
+        self.args: dict[str: Callable] = args
+        self.args["e_X_it"] = lambda : print()
+        self.validInputs = []
+        if init_foo is not None:
+            init_foo()
 
     def run(self):
         print(self.title)
-
-        i:str
+        i:str | None
         input_str = ""
         for i in self.args.keys():
             tmp = i.split("_")
@@ -26,42 +27,31 @@ class CLI_generator:
             input_str += tmp
 
         while i != 'x':
-            i = input(input_str)
+            found = False
+            i = input(input_str).lower()
+            if i == "x":
+                found = True
+            for k in self.args.keys():
+                if i == k.split("_")[1].lower():
+                    self.args[k]()
+                    found = True
+            if not found:
+                print("Error! Invalid Input!")
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
-    print("Welcome to the Linked Lists CLI")
-    i = None
-    linked_list = ll.DSALinkedList()
-    while i != 'x':
-        i = input(f"\tinsert at {us}S{ue}tart\n"
-              f"\tinsert at {us}E{ue}nd\n"
-              f"\tremove {us}F{ue}irst\n"
-              f"\tremove {us}L{ue}ast\n"
-              f"\t{us}D{ue}isplay list\n"
-              f"\tcreate {us}R{ue}andom list\n"
-              f"\te{us}X{ue}it\n"
-              f"\t")
-        match i.lower():
-            case "s":
-                linked_list.insert_first(input("input value to insert\n"))
-            case "e":
-                linked_list.insert_last(input("input value to insert\n"))
-            case "f":
-                print("removed value: " + linked_list.remove_first())
-            case "l":
-                print("removed value: " + linked_list.remove_last())
-            case "d":
-                print(linked_list.to_list())
-            case "r":
-                amt = input("\t\thow many random values?\n\t\t")
-                while not isinstance(amt, int):
-                    try:
-                        amt = int(amt)
-                    except ValueError:
-                        amt = input("\t\tplease enter an integer\n\t\t")
-                for i in range(0, amt):
-                    linked_list.insert_first(str(random.randint(0,100)))
-            case "x":
-                pass
-            case _ :
-                print("Unknown Input")
+
+    linked_list = DSALinkedList()
+
+    args = {
+        "insert at _S_tart": lambda : linked_list.insert_first(input("input value to insert\n")),
+        "insert at _E_nd": lambda : linked_list.insert_last(input("input value to insert\n")),
+        "_D_isplay": lambda : print(linked_list.to_list())
+    }
+    CLI_generator(title="ll CLI", args=args).run()
