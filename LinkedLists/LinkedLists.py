@@ -95,6 +95,29 @@ class DSALinkedList(Generic[T]):
             self.start.set_prev(None)
             return tmp
 
+    def remove_item(self, item):
+        if self.is_empty():
+            raise IndexError("List is empty")
+        target: DSALinkedList.ListItem | None = None
+        for i in self:
+            if i.get_value() == item:
+                target = i
+                break
+        if not target:
+            raise Exception("No vertex found")
+        if target.get_next() is None:
+            self.remove_last()
+        elif target.get_prev() is None:
+            self.remove_first()
+        else:
+            next_i: DSALinkedList.ListItem = target.get_next()
+            prev_i: DSALinkedList.ListItem = target.get_prev()
+
+            next_i.prev = prev_i
+            prev_i.next = next_i
+
+        return target.get_value()
+
     def remove_last(self):
         if self.is_empty():
             raise IndexError("List is empty")

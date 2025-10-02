@@ -1,11 +1,9 @@
-import random
 
 import LinkedLists.LinkedLists as ll
 from typing import TypeVar, Generic
 
 from LinkedLists.LinkedLists import DSALinkedList, as_sorted
-from LinkedLists.LinkedStacksQueues import DSALinkedQueue, DSAStack
-from SortFilesPython.DSAsorts import selection_sort
+from LinkedLists.LinkedStacksQueues import DSALinkedQueue
 
 T = TypeVar('T')
 
@@ -60,6 +58,19 @@ class DSAGraph(Generic[T]):
         if self.directional: return
         vertex2.links.insert_last(vertex1)
 
+    def delete_edge(self, vertex1_label: str, vertex2_label: str):
+        vertex1 = self.find_vertex(vertex1_label)
+        vertex2 = self.find_vertex(vertex2_label)
+        if not vertex1:
+            raise Exception(f"No vertex {vertex1_label} exists")
+        if not vertex2:
+            raise Exception(f"No vertex {vertex2_label} exists")
+        if vertex2 not in vertex1.links:
+            raise Exception(f"No edge exists between {vertex1_label}, {vertex2_label}")
+        vertex1.links.remove_item(vertex2)
+        if not self.directional:
+            vertex2.links.remove_item(vertex1)
+
     def has_vertex(self) -> bool:
         return not self.vertices.is_empty()
 
@@ -80,9 +91,9 @@ class DSAGraph(Generic[T]):
 
     def display_as_list(self) -> None:
         for v in self.vertices:
-            print(v.label, v.value)
+            print(v.label)
             for vv in v.links:
-                print(f"\t{vv.label}:{vv.value}")
+                print(f"\t{vv.label}")
 
     def display_as_matrix(self) -> None:
         row = "  "

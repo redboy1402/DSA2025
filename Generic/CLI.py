@@ -7,9 +7,9 @@ us = '\033[4m'
 ue = '\033[0m'
 
 class CLI_generator:
-    def __init__(self, title: str, args: dict[str: Callable], init_foo = None):
+    def __init__(self, title: str, my_args: dict[str: Callable], init_foo = None):
         self.title = title
-        self.args: dict[str: Callable] = args
+        self.args: dict[str: Callable] = my_args
         self.args["e_X_it"] = lambda : print()
         self.validInputs = []
         if init_foo is not None:
@@ -37,12 +37,6 @@ class CLI_generator:
                     found = True
             if not found:
                 print("Error! Invalid Input!")
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
