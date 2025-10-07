@@ -48,6 +48,22 @@ class DSALinkedList(Generic[T]):
     def __str__(self):
         return str([*self])
 
+    def __getitem__(self, index):
+        out: DSALinkedList.ListItem | None = self.start
+        for _ in range(index):
+            if out is None:
+                raise IndexError("Index out of range")
+            out = out.next
+        return out.value
+
+    def __setitem__(self, index, value):
+        out: DSALinkedList.ListItem | None = self.start
+        for _ in range(index):
+            if out is None:
+                raise IndexError("Index out of range")
+            out = out.next
+        out.value = value
+
     def insert_first(self, item: T):
         if self.is_empty():
             self.start = self.ListItem(item)
