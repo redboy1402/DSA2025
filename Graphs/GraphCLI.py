@@ -12,7 +12,7 @@ if __name__ == "__main__":
         "delete edge (_DE_)" : lambda : graph.delete_edge(input("First node: "), input("Second Node: ")) (print("invalid input")),
         "display as _L_ist" : lambda : graph.display_as_list(),
         "display as _M_atrix" : lambda : graph.display_as_matrix(),
-        "breadth first search (_bfs_)" : lambda : print([i.label for i in graph.depth_first_search()]),
-        "depth first search (_dfs_)" : lambda : print([i.label for i in graph.breadth_first_search()])
+        "breadth first search (_BFS_)" : lambda : print([i.label for i in graph.depth_first_search()]),
+        "depth first search (_DFS_)" : lambda : print([i.label for i in graph.breadth_first_search()])
     }
-    CLI_generator(title="Welcome to the DSA Graphs CLI!", args=args).run()
+    CLI_generator(title="Welcome to the DSA Graphs CLI!", my_args=args).run()
