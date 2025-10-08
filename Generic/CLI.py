@@ -37,6 +37,7 @@ class CLI_generator:
                     found = True
             if not found:
                 print("Error! Invalid Input!")
+        print("Program Exited")
 
 
 if __name__ == '__main__':
