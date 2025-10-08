@@ -35,9 +35,13 @@ class DSALinkedList(Generic[T]):
         def set_next(self, val):
             self.next = val
 
-    def __init__(self):
+    def __init__(self, data: list[T] | None = None):
         self.start = None
         self.end = None
+        
+        if data is not None:
+            for i in data:
+                self.insert_last(i)
 
     def __iter__(self):
         curr: DSALinkedList.ListItem | None = self.start
@@ -63,6 +67,14 @@ class DSALinkedList(Generic[T]):
                 raise IndexError("Index out of range")
             out = out.next
         out.value = value
+
+    def __len__(self):
+        curr = self.start
+        i = 0
+        while curr is not None:
+            i += 1
+            curr = curr.get_next()
+        return i
 
     def insert_first(self, item: T):
         if self.is_empty():

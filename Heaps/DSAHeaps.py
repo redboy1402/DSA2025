@@ -1,13 +1,18 @@
 from math import floor
+from LinkedLists.LinkedLists import DSALinkedList
 
 
-def heapsort(arr: []):
-    heap = DSAHeap([DSAHeapEntry(i) for i in arr])
+def heapsort(arr: DSALinkedList, has_value = False):
+    #converts values to DSAHeapEntries
+    if has_value:
+        heap = DSAHeap(DSALinkedList([DSAHeapEntry(i[0], i[1]) for i in arr]))
+    else:
+        heap = DSAHeap(DSALinkedList([DSAHeapEntry(i) for i in arr]))
     for i in range(len(arr)-1, 0, -1):
         heap.heap_arr[0], heap.heap_arr[i] = heap.heap_arr[i], heap.heap_arr[0]
         heap.trickle_down(0, i)
 
-    arr = [i.priority for i in heap.heap_arr]
+    arr = [i for i in heap.heap_arr]
     return arr
 
 
@@ -31,19 +36,19 @@ class DSAHeapEntry:
         self.value = value
 
 class DSAHeap:
-    def __init__(self, heap_arr: list[DSAHeapEntry] = None):
+    def __init__(self, heap_arr: DSALinkedList = None):
         if heap_arr is None:
-            heap_arr = []
+            heap_arr = DSALinkedList()
         self.heap_arr = heap_arr
         self.heapify()
 
     def add(self, entry: DSAHeapEntry):
-        self.heap_arr.append(entry)
+        self.heap_arr.insert_last(entry)
         self.trickle_up(len(self.heap_arr) - 1)
 
     def remove(self):
         out = self.heap_arr[0]
-        self.heap_arr[0] = self.heap_arr.pop(len(self.heap_arr)-1)
+        self.heap_arr[0] = self.heap_arr.pop_last()
         return out.value
 
     def trickle_up(self, index: int):
@@ -85,6 +90,8 @@ class DSAHeap:
         print([i.value for i in self.heap_arr])
 
 if __name__ == "__main__":
-    test = [5, 6, 3, 2, 8]
+    test = DSALinkedList()
+    for i in [1, 6, 3, 5, 7]:
+        test.insert_last(i)
     print(test)
     print(heapsort(test))
