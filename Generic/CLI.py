@@ -6,6 +6,22 @@ from LinkedLists.LinkedLists import DSALinkedList
 us = '\033[4m'
 ue = '\033[0m'
 
+def input_int(prompt: str) -> int:
+    input_str = input(prompt)
+    while not input_str.isdigit():
+        print("Invalid input!")
+        input_str = input(prompt)
+    return int(input_str)
+
+def try_input(prompt: str, foo: Callable):
+    input_str = input(prompt)
+    while input_str != "EXIT":
+        try:
+            return foo(input_str)
+        except:
+            print("Error! use 'EXIT' to exit")
+            input_str = input(prompt)
+    return
 
 class CLIGenerator:
     def __init__(self, title: str, my_args: DSAHashTable[Callable], init_foo = None):
@@ -49,4 +65,5 @@ if __name__ == '__main__':
     args.put("insert at _S_tart", lambda : linked_list.insert_first(input("input value to insert\n")))
     args.put("insert at _E_nd", lambda : linked_list.insert_last(input("input value to insert\n")))
     args.put("_D_isplay", lambda : print(linked_list.to_list()))
+
     CLIGenerator(title="ll CLI", my_args=args).run()

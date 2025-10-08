@@ -53,7 +53,7 @@ class DSALinkedList(Generic[T]):
         out = "["
         for i in self:
             out += str(i) + ", "
-        out += "]"
+        out = out[:-2] + "]"
         return out
 
     def __getitem__(self, index):

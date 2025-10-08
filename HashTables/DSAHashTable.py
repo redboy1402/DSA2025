@@ -6,7 +6,6 @@ T = TypeVar('T')
 
 import numpy as np
 
-from Heaps.DSAHeaps import DSAHeapEntry
 from LinkedLists.LinkedLists import DSALinkedList
 
 
@@ -23,7 +22,7 @@ def nextPrime(start: int):
 
         i = 3
         is_prime = True
-        while i ** 2 <= prime ** 0.5 and is_prime:
+        while i * i <= prime and is_prime:
             if prime % i == 0:
                 is_prime = False
             else:
@@ -52,6 +51,9 @@ class DSAHashEntry(Generic[T]):
         self.value = value
         self.state = state
 
+    def __str__(self):
+        return f"{self.key}: {self.value}"
+
     def get_key(self):
         return self.key
 
@@ -75,13 +77,14 @@ class DSAHashEntry(Generic[T]):
 
 
 class DSAHashTable(Generic[T]):
-    def __init__(self, arr: DSALinkedList[DSAHashEntry[T]], count: int | None = None):
+    def __init__(self, arr: DSALinkedList[DSAHashEntry[T]] = DSALinkedList(), count: int | None = None):
         if count is None:
             count = len(arr)
         if count < len(arr):
             raise Exception("Count is less than array")
         self.count: int = nextPrime(count)
         self.hash_table = np.empty(shape=self.count, dtype=DSAHashEntry)
+        self.ordered_keys = DSALinkedList[str]()
         self.size = 0
 
         for i in arr:
@@ -93,15 +96,14 @@ class DSAHashTable(Generic[T]):
     def __getitem__(self, key: str):
         return self.get(key).get_value()
 
-    def keys(self):
-        keys = DSALinkedList[str]()
-        for i in self.hash_table:
-            if i is not None:
-                if i.get_state() == 1:
-                    keys.insert_last(i.get_key())
-        return keys
+    def __iter__(self):
+        for i in self.ordered_keys:
+            yield self.get(i)
 
-    def put(self, key: str, value):
+    def keys(self):
+        return self.ordered_keys
+
+    def put(self, key: str, value, add_to_keys: bool = True):
         if self.size / self.count > 0.5:
             self.resize()
 
@@ -113,9 +115,11 @@ class DSAHashTable(Generic[T]):
         while not found:
             current: DSAHashEntry | None = self.hash_table[index]
 
-            if current is None or current.state in [0, 2]:
+            if current is None or current.state == 0 or current.state == 2:
                 self.hash_table[index] = entry
                 self.size += 1
+                if add_to_keys:
+                    self.ordered_keys.insert_last(key)
                 found = True
             elif current.key == key:
                 current.set_value(value)
@@ -128,6 +132,9 @@ class DSAHashTable(Generic[T]):
     def remove(self, key):
         self.get(key).set_state(2)
         self.size -= 1
+        #for i in range(len(self.ordered_keys)):
+         #   if key == self.ordered_keys[i]:
+          #      self.ordered_keys.remove_item(self.ordered_keys[i])
 
     def has_key(self, key) -> bool:
         index = hashing(key, self.count)
@@ -145,6 +152,7 @@ class DSAHashTable(Generic[T]):
                 index = (index + 1) % self.count
                 if index == initial_index:
                     return False
+        return False
 
     def get(self, key) -> DSAHashEntry:
         index = hashing(key, self.count)
@@ -172,7 +180,7 @@ class DSAHashTable(Generic[T]):
 
         for entry in old_table:
             if entry is not None and entry.state == 1:
-                self.put(entry.key, entry.value)
+                self.put(entry.key, entry.value, False)
 
 
 if __name__ == "__main__":
