@@ -1,25 +1,23 @@
 from abc import abstractmethod, ABC
-
-from numpy.ma.extras import dstack
+import numpy as np
 
 
 class DSAStack:
     def __init__(self, size=100):
-        self.items = [""] * size
+        self.items = np.empty(size, dtype=object)
         self.size = size
         self.count = 0
 
     def push(self, item):
-        if self.isFull():
+        if self.is_full():
             raise IndexError("Stack is full")
         else:
             self.items[self.count] = item
             self.count += 1
-            #print(f"added  {item}\t count {self.count}\t items {self.items}")
 
 
     def pop(self):
-        if self.isEmpty():
+        if self.is_empty():
             raise IndexError("Stack is empty")
         else:
             out = self.items[self.count - 1]
@@ -28,23 +26,23 @@ class DSAStack:
             return out
 
     def top(self):
-        if self.isEmpty():
+        if self.is_empty():
             raise IndexError("Stack is empty")
         else:
             return self.items[self.count - 1]
 
-    def getCount(self):
+    def get_count(self):
         return self.count
 
-    def isEmpty(self):
+    def is_empty(self):
         return self.count == 0
 
-    def isFull(self):
+    def is_full(self):
         return self.count == self.size
 
 class _DSAQueue(ABC):
     def __init__(self, size=100):
-        self.items = [""] * size
+        self.items = np.empty(size, dtype=object)
         self.size = size
         self.count = 0
 
@@ -139,13 +137,13 @@ def parse_infix_to_postfix(infix: str) -> _DSAQueue:
             opStack.pop()
 
         elif token in "+-*/":
-            while (not opStack.isEmpty()) and opStack.top() != "(" and _precedence(opStack.top()) >= _precedence(token):
+            while (not opStack.is_empty()) and opStack.top() != "(" and _precedence(opStack.top()) >= _precedence(token):
                 postFix.push(opStack.pop())
             opStack.push(token)
         else:
             postFix.push(token)
 
-    while not opStack.isEmpty():
+    while not opStack.is_empty():
         postFix.push(opStack.pop())
     return postFix
 

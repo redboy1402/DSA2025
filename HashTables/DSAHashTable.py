@@ -1,4 +1,10 @@
 import csv
+from random import randint
+from typing import Generic, TypeVar
+
+T = TypeVar('T')
+
+import numpy as np
 
 from Heaps.DSAHeaps import DSAHeapEntry
 from LinkedLists.LinkedLists import DSALinkedList
@@ -26,19 +32,21 @@ def nextPrime(start: int):
 
 
 def hashing(key: str, count: int) -> int:
+    #converts any str to bytes to int to string of said int, allowing any arbitrary str to work
+    conv_key = str(int.from_bytes(bytes(key, 'utf-8'), 'big'))
     a = 63689
     b = 378551
     hash_idx = 0
 
     for i in range(len(key)):
-        hash_idx = (hash_idx * a) + int(key[i])
+        hash_idx = (hash_idx * a) + int(conv_key[i])
         a *= b
 
     return hash_idx % count
 
 
-class DSAHashEntry:
-    def __init__(self, key: str, value, state: int = 1):
+class DSAHashEntry(Generic[T]):
+    def __init__(self, key: str, value: T, state: int = 1):
         # 0: Empty, 1: In use, 2: Removed
         self.key = key
         self.value = value
@@ -66,15 +74,32 @@ class DSAHashEntry:
             raise ValueError("Invalid state")
 
 
-class DSAHashTable:
-    def __init__(self, arr: DSALinkedList[DSAHashEntry], count: int | None = None):
+class DSAHashTable(Generic[T]):
+    def __init__(self, arr: DSALinkedList[DSAHashEntry[T]], count: int | None = None):
         if count is None:
             count = len(arr)
         if count < len(arr):
             raise Exception("Count is less than array")
-        self.count = nextPrime(count)
-        self.hash_table = [None] * self.count
+        self.count: int = nextPrime(count)
+        self.hash_table = np.empty(shape=self.count, dtype=DSAHashEntry)
         self.size = 0
+
+        for i in arr:
+            self.put(i.get_key(), i.get_value())
+
+    def __setitem__(self, key: str, value: T):
+        self.put(key, value)
+
+    def __getitem__(self, key: str):
+        return self.get(key).get_value()
+
+    def keys(self):
+        keys = DSALinkedList[str]()
+        for i in self.hash_table:
+            if i is not None:
+                if i.get_state() == 1:
+                    keys.insert_last(i.get_key())
+        return keys
 
     def put(self, key: str, value):
         if self.size / self.count > 0.5:
@@ -121,7 +146,6 @@ class DSAHashTable:
                 if index == initial_index:
                     return False
 
-
     def get(self, key) -> DSAHashEntry:
         index = hashing(key, self.count)
         initial_index = index
@@ -132,24 +156,23 @@ class DSAHashTable:
 
             if current is None:
                 raise Exception("No such key exists")
-            if current.get_key() == key and current.get_state() == 1:
+            elif current.get_key() == key and current.get_state() == 1:
                 return current
-            if current.get_state() in [1, 2]:
+            elif current.get_state() == 1 or current.get_state() == 2:
                 index = (index + 1) % self.count
                 if index == initial_index:
                     raise Exception("No such key exists")
 
+    def resize(self):
+        old_table = self.hash_table
+        new_count = nextPrime(self.count * 2)
+        self.hash_table = np.empty(shape=new_count, dtype=DSAHashEntry)
+        self.count = new_count
+        self.size = 0
 
-def resize(self):
-    old_table = self.hash_table
-    new_count = nextPrime(self.count * 2)
-    self.hash_table = [None] * new_count
-    self.count = new_count
-    self.size = 0
-
-    for entry in old_table:
-        if entry is not None and entry.state == 1:
-            self.put(entry.key, entry.value)
+        for entry in old_table:
+            if entry is not None and entry.state == 1:
+                self.put(entry.key, entry.value)
 
 
 if __name__ == "__main__":
@@ -157,7 +180,10 @@ if __name__ == "__main__":
         reader = csv.reader(f)
         data = DSALinkedList(list(reader))
 
-    data_hash_entries = [DSAHashEntry(i[0], i[1]) for i in data]
-    table = DSAHashTable(DSALinkedList(data_hash_entries))
-    for i in range(0,10):
-        print(f"arr: {data_hash_entries[i]}; hash table: {table.get(data_hash_entries[i])}")
+    data_hash_entries = DSALinkedList()
+    for i in data:
+        data_hash_entries.insert_last(DSAHashEntry(i[0], i[1]))
+    table = DSAHashTable(data_hash_entries)
+
+    for _ in range(0, 10):
+        i = randint(0, len(data_hash_entries))

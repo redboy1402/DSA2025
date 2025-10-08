@@ -50,7 +50,11 @@ class DSALinkedList(Generic[T]):
             curr = curr.get_next()
 
     def __str__(self):
-        return str([*self])
+        out = "["
+        for i in self:
+            out += str(i) + ", "
+        out += "]"
+        return out
 
     def __getitem__(self, index):
         out: DSALinkedList.ListItem | None = self.start
@@ -75,6 +79,14 @@ class DSALinkedList(Generic[T]):
             i += 1
             curr = curr.get_next()
         return i
+
+    def __contains__(self, item):
+        curr: DSALinkedList.ListItem | None = self.start
+        while curr is not None:
+            if curr.value == item:
+                return True
+            curr = curr.next
+        return False
 
     def insert_first(self, item: T):
         if self.is_empty():

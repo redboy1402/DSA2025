@@ -1,15 +1,16 @@
 from typing import Callable
-
+from HashTables.DSAHashTable import DSAHashTable
 from LinkedLists.LinkedLists import DSALinkedList
 
 #underscore start & end
 us = '\033[4m'
 ue = '\033[0m'
 
-class CLI_generator:
-    def __init__(self, title: str, my_args: dict[str: Callable], init_foo = None):
+
+class CLIGenerator:
+    def __init__(self, title: str, my_args: DSAHashTable[Callable], init_foo = None):
         self.title = title
-        self.args: dict[str: Callable] = my_args
+        self.args: DSAHashTable[Callable] = my_args
         self.args["e_X_it"] = lambda : print()
         self.validInputs = []
         if init_foo is not None:
@@ -17,7 +18,7 @@ class CLI_generator:
 
     def run(self):
         print(self.title)
-        i:str | None
+        i:str = ""
         input_str = ""
         for i in self.args.keys():
             tmp = i.split("_")
@@ -44,9 +45,8 @@ if __name__ == '__main__':
 
     linked_list = DSALinkedList()
 
-    args = {
-        "insert at _S_tart": lambda : linked_list.insert_first(input("input value to insert\n")),
-        "insert at _E_nd": lambda : linked_list.insert_last(input("input value to insert\n")),
-        "_D_isplay": lambda : print(linked_list.to_list())
-    }
-    CLI_generator(title="ll CLI", args=args).run()
+    args: DSAHashTable[Callable] = DSAHashTable(DSALinkedList())
+    args.put("insert at _S_tart", lambda : linked_list.insert_first(input("input value to insert\n")))
+    args.put("insert at _E_nd", lambda : linked_list.insert_last(input("input value to insert\n")))
+    args.put("_D_isplay", lambda : print(linked_list.to_list()))
+    CLIGenerator(title="ll CLI", my_args=args).run()

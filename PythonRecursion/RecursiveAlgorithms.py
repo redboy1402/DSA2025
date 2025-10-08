@@ -101,7 +101,11 @@ def _hanoiTowers(n, src, dest, recursion):
 
 
 def main():
-   print(GCD(5.3, 10))
+   print(GCD(3, 7))
+   print(convertBase(12, 16))
+   print(factorialRecursive(12))
+   print(fibonnacciIterative(12))
+   towers(3)
 
 if __name__ == "__main__":
     main()

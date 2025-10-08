@@ -110,7 +110,7 @@ class DSAGraph(Generic[T]):
             print(row)
 
     def depth_first_search(self) -> DSALinkedQueue:
-        visited = []
+        visited = ll.DSALinkedList()
         output = DSALinkedQueue()
         first_node = as_sorted(self.vertices, key= lambda v : v.label).peek_first()
         self.DFS_visit(first_node, visited, output)
@@ -120,7 +120,7 @@ class DSAGraph(Generic[T]):
         if vertex in visited:
             return
 
-        visited.append(vertex)
+        visited.insert_last(vertex)
         output.push(vertex)
         for v in vertex.links:
             self.DFS_visit(v, visited, output)

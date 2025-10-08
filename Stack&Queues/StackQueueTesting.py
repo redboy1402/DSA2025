@@ -1,6 +1,8 @@
 from random import randint, seed
 
 import StacksQueues as sq
+from LinkedLists.LinkedLists import DSALinkedList
+
 
 def main():
     seed_val = 22120294
@@ -15,31 +17,31 @@ def main():
         stack = sq.DSAStack()
         for i in arr:
            stack.push(i)
-        out = []
-        while not stack.isEmpty():
-            out.append(stack.pop())
+        out = DSALinkedList()
+        while not stack.is_empty():
+            out.insert_last(stack.pop())
         f.write("output: " + str(out) + "\n")
         f.write("Test Passed!" + "\n\n" if out == arr[::-1] else "Test Failed!" + "\n\n")
 
         f.write("Testing DSA Queues" + "\n")
         f.write("Testing DSA Shuffle Queue" + "\n")
         shuffle_queue = sq.DSAShufflingQueue()
-        out = []
+        out = DSALinkedList()
         for i in arr:
             shuffle_queue.push(i)
         while not shuffle_queue.isEmpty():
-            out.append(shuffle_queue.pop())
+            out.insert_last(shuffle_queue.pop())
         f.write("Expected output: " + str(arr) + "\n")
         f.write("Output: " + str(out) + "\n")
         f.write("Test Passed!" + "\n\n" if out == arr else "Test Failed!" + "\n\n")
 
         f.write("Testing DSA Circular Queue" + "\n")
         circle_queue = sq.DSACircularQueue()
-        out = []
+        out = DSALinkedList()
         for i in arr:
             circle_queue.push(i)
         while not circle_queue.isEmpty():
-            out.append(circle_queue.pop())
+            out.insert_last(circle_queue.pop())
         f.write("Expected Output: " + str(arr) + "\n")
         f.write("Output: " + str(out) + "\n")
         f.write("Test Passed!" + "\n\n" if out == arr else "Test Failed!" + "\n\n")

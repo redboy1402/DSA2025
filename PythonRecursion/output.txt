@@ -1,4 +1,4 @@
-factorialRecursive from 750 to 839 finished in 0.101 seconds.
-factorialIterative from 750 to 875 finished in 0.101 seconds.
-GCD found 5391 GCD's of random pairs. finished in 0.100 seconds.
-convertBase converted 25870 random values to random bases. finished in 0.100 seconds.
+factorialRecursive from 750 to 891 finished in 0.100 seconds.
+factorialIterative from 750 to 949 finished in 0.101 seconds.
+GCD found 6852 GCD's of random pairs. finished in 0.100 seconds.
+convertBase converted 15951 random values to random bases. finished in 0.100 seconds.

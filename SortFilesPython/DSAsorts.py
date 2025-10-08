@@ -39,8 +39,6 @@ def bubbleSort(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]]) -> np.nd
     return arr
 
 
-
-
 def insertionSort(arr: np.ndarray[tuple[int], np.dtype[np.signedinteger]]) -> list[int]:
     for i in range(1, len(arr)):
         j = i
